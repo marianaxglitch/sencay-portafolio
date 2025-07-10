@@ -12,8 +12,9 @@ $(document).ready(function () {
     // load functions
     imageBG();
     grid();
+    setupPreviewModal();
 
-    // isotope filters
+    // isotope filters (reordenamiento no incluido aquí)
     $('#filters li a').on('click', function (e) {
         e.preventDefault();
 
@@ -26,6 +27,21 @@ $(document).ready(function () {
             filter: filter
         });
     });
+
+    // Mezclar entradas solo una vez (al cargar)
+    const $grid = $('.grid');
+    const initialItems = $grid.children('.entry').get();
+    for (let i = initialItems.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [initialItems[i], initialItems[j]] = [initialItems[j], initialItems[i]];
+    }
+    $grid.append(initialItems); // Reordenar DOM antes de Isotope
+
+    // Inicializar Isotope luego de reordenar
+    $grid.isotope({
+        itemSelector: '.entry',
+        layoutMode: 'masonry'
+    });
 });
 
 win.on('load', function () {
@@ -33,7 +49,7 @@ win.on('load', function () {
         $('#preloader').addClass('hide');
     }, 1000);
 
-    // load functions
+    // reload grid on load
     grid();
 });
 
@@ -134,7 +150,7 @@ function grid() {
             }
         });
 
-        // init isotope
+        // reinicializar isotope
         active_container.isotope({
             itemSelector: '.entry',
             transitionDuration: '.2s',
@@ -148,9 +164,14 @@ function grid() {
                 columnWidth: items_width + margin
             }
         });
+    }
+}
 
-        $(document).ready(function () {
-    // Preview modal logic
+
+/** MODAL PREVIEW */
+/** ===================== */
+
+function setupPreviewModal() {
     $('.preview-link').on('click', function (e) {
         e.preventDefault();
         var src = $(this).attr('href');
@@ -163,12 +184,6 @@ function grid() {
     });
 
     $('#modal-img').on('click', function (e) {
-        e.stopPropagation(); // evita que al hacer clic en la imagen se cierre el modal
+        e.stopPropagation(); // evita cerrar al hacer clic en la imagen
     });
-});
-
-    }
 }
-
-
-

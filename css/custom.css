@@ -47,3 +47,10 @@ Your custom css here
     font-weight: bold;
     cursor: pointer;
 }
+
+.intro-small {
+  font-size: 1rem;  
+  line-height: 1.5;
+  color: #333;     
+}
+
